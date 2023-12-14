@@ -1,0 +1,181 @@
+body {
+  /* background-color: white; */
+}
+#app {
+  display: flex;
+  flex-direction: column;
+  grid-gap: 1rem;
+  margin: auto;
+}
+
+.trabajo {
+  display: flex;
+  flex-direction: column;
+  // grid-gap: 1rem;
+}
+h1, h2 {
+  /* color: green; */
+}
+
+button{
+  padding: 1rem 1rem;
+}
+
+ul {
+  li{
+    color: black;
+  }
+}
+
+ul {
+  list-style-type: decimal;
+}
+
+.fruta {
+  margin-bottom: 2rem;
+}
+
+.Mouse {
+  display: flex;
+  flex-direction: column;
+  grid-gap: 1rem;
+  margin-top: 2rem;
+
+  .subtotal {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .Calcu {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 1rem;
+  }
+
+  h3 {
+    display: flex;
+    justify-content: center;
+    color: brown;
+  }
+
+  .reset {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 1rem;
+  }
+}
+
+.Post {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  grid-gap: 1rem;
+
+  .botones {
+    display: flex;
+    flex-direction: row;
+    grid-gap: .7rem;
+  }
+  .boton-Post {
+    margin: auto;
+    width: 100%;
+  }
+  .boton-blo {
+    background-color: rgb(229, 229, 229) !important;
+    pointer-events:none;
+  }
+}
+
+.caja-1 {
+  margin: auto;
+
+  .caja-body {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid red;
+    padding: 1rem 1.5rem;
+    border-radius: 1rem;
+  }
+
+  .card-title {
+    margin: 0 auto 1rem;
+    font-family: serif;
+    font-size: 1rem;
+    color: brown;
+  }
+
+  p {
+    font-family: "Times New Roman", Verdana, serif;
+    font-size: .7rem;
+    margin: 0 auto;
+  }
+
+  button {
+    margin: 1rem auto .5rem;
+    border-radius: 10rem;
+    padding: .8rem;
+    font-size: .7rem;
+    background-color: white;
+    font-weight: bold;
+    &:hover{
+      background-color: #37C0FF;
+      color: white;
+    }
+  }
+}
+
+.prueba {
+  padding: 0.5rem;
+
+  .lista {
+    display: flex;
+    flex-direction: row;
+    grid-gap: .8rem;
+    margin: auto;
+    height: 70%;
+    transform: scale(1);
+    width: 90%;
+    overflow-x: scroll;
+    margin-bottom: 1rem;
+    /* position: fixed; */
+
+  }
+}
+
+nav {
+  a {
+    color:  #6E75FF;
+
+  }
+}
+
+.Register, .Login, .Home {
+  display: flex;
+  flex-direction: column;
+
+  h1 {
+    margin: 2.5rem auto;
+  }
+  .input-register {
+    background-color: #505050;
+    padding: .4rem;
+    width: 12rem;
+    margin: auto;
+  }
+  button {
+
+    margin: 1rem auto; 
+    padding: 1rem 1.5rem;
+    &:hover{
+      background-color: white;
+      color: #242424;
+    }
+  }
+}
+
+.inputs {
+  display: flex;
+  flex-direction: column;
+  grid-gap: 1rem;
+}
