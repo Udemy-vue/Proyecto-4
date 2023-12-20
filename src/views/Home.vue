@@ -16,6 +16,7 @@
     </form>
 
     <h2 v-if="useData.loadingDoc">Loading docs..</h2>
+    
     <ul v-else class="Userli">
       <li v-for="item of useData.documents" :key="item.id">
         <span>{{item.id}}</span>
@@ -76,7 +77,7 @@ export default {
       this.useUser.signOutUser();
     },
     async CreateInput() {
-      if(this.name === '') return alert('Añada un URL');
+      if(this.name === '') return alert('Añada una URL');
 
       await this.useData.addUrl(this.name)
       this.name = '';
