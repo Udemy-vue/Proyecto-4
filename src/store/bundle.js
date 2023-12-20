@@ -1,11 +1,15 @@
 import axios from 'axios';
 import { defineStore } from "pinia";
-import { auth } from "../../firebaseConfig";
+import { auth, db } from "../../firebaseConfig";
 import { createUserWithEmailAndPassword, 
 		signInWithEmailAndPassword,
 		onAuthStateChanged,
 		signOut} from "firebase/auth";
-import router from "../router";
+import { collection, query, where, getDoc, 
+		getDocs, addDoc, deleteDoc, doc,
+		updateDoc } from 'firebase/firestore'
+import router from '../router';
+import { nanoid } from 'nanoid';
 export const useUserStore = defineStore("user", {
   state: () => ({
       userData: "bluuweb",
@@ -72,7 +76,7 @@ export const useUserStore = defineStore("user", {
       } finally {
         this.loadingUser = false;
       }
-    },
+    }, 
 
     async signOutUser() {
       this.loadingUser = true;
@@ -115,4 +119,142 @@ export const useUserStore = defineStore("user", {
     }
   }
 });
+
+export const useDatabaseStore = defineStore('database', {
+	state: () => ({
+		documents: [],
+		loadingDoc: false,
+		userUid: ''
+	}),
+	getters: {
+
+	},
+	actions: {
+		async getUrls() {
+			if (this.documents.length !== 0) {
+				return;
+			}
+			this.loadingDoc = true;
+			this.documents = [];
+			try {
+				 const q = query(collection(db, 'urls'), 
+				 	where("user", "==", auth.currentUser.uid));
+				 const querySnapshot = await getDocs(q)
+				 querySnapshot.forEach((doc) => {
+				 	// console.log(doc.id, doc.data());
+				 	this.documents.push({
+				 		id: doc.id,
+				 		...doc.data()
+				 	});
+				 });
+				 // console.log(this.documents);
+			} catch(e) {
+				// statements
+				console.log(e);
+			} finally {
+				// statements
+				this.loadingDoc = false;
+			}
+		},
+		signOutUser() {
+			this.documents = [];
+		},
+		lectura(texto) {
+			console.log("hola a todos", texto)
+		},
+		async addUrl(name) {
+			this.loadingDoc = true;
+			try {
+				const objetoDoc = {
+					name: name,
+					short: nanoid(6),
+					user: auth.currentUser.uid
+				};
+				const docRef = await addDoc(collection(db, "urls"), objetoDoc);
+				// console.log(docRef);
+				this.documents.push({
+					...objetoDoc,
+					id: docRef.id
+				});
+			} catch(e) {
+				// statements
+				console.log(e);
+			} finally {
+				// statements<
+				this.loadingDoc = false;
+			}
+		},
+		async deleteUrl(id) {
+			this.loadingDoc = true;
+			try {
+				const docRef = await doc(db, "urls", id);
+				const docSnap = await getDoc(docRef);
+
+				if (!docSnap.exists()) {
+					throw new Error('no existe el documentos');
+				}
+				if(docSnap.data().user !== auth.currentUser.uid) {
+					throw new Error('no existe el documentos');
+				}
+				await deleteDoc(docRef);
+				this.documents = this.documents.filter(item => item.id !== id)
+			} catch(e) {
+				// statements
+				console.log(e);
+			} finally {
+				// statements
+				this.loadingDoc = false;
+			}
+		},
+
+		async readUrl() {
+			this.loadingDoc = true;
+			try {
+				const docRef = await doc(db, "urls", this.userUid);
+				const docSnap = await getDoc(docRef);
+
+				if (!docSnap.exists()) {
+					throw new Error('no existe el documentos');
+				}
+				if(docSnap.data().user !== auth.currentUser.uid) {
+					throw new Error('no existe el documentos');
+				}
+				return docSnap.data().name;
+			} catch(e) {
+				// statements
+				console.log(e);
+			} finally {
+				// statements
+				this.loadingDoc = false;
+			}
+		},
+
+		async updateUrl(name){
+			// console.log(name);
+			this.loadingDoc = true;
+			try {
+				const docRef = await doc(db, "urls", this.userUid);
+				const docSnap = await getDoc(docRef);
+
+				if (!docSnap.exists()) {
+					throw new Error('no existe el documentos');
+				}
+				if(docSnap.data().user !== auth.currentUser.uid) {
+					throw new Error('no existe el documentos');
+				}
+				await updateDoc(docRef, { name: name });
+				this.documents = this.documents.map((item) => 
+					item.id === this.userUid ? { ...item, name: this.userUid } : item
+				);
+				router.push("/");
+			} catch(e) {
+				// statements
+				console.log(e);
+			} finally {
+				// statements
+				this.loadingDoc = false;
+			}
+		}
+	}
+})
 //# sourceMappingURL=bundle.js.map

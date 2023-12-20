@@ -1,6 +1,7 @@
 {
   "js": [
     "Importar.js",
-    "user.js"
+    "user.js",
+    "database.js"
   ]
 }

@@ -150,7 +150,7 @@ nav {
   }
 }
 
-.Register, .Login, .Home {
+.Register, .Login, .Home, .Editar {
   display: flex;
   flex-direction: column;
 
@@ -170,6 +170,38 @@ nav {
     &:hover{
       background-color: white;
       color: #242424;
+    }
+  }
+  .Userli {
+    padding: 0;
+
+    li {
+      display: flex;
+      flex-direction: column;
+      margin: .5rem auto;
+      min-width: 12rem;
+      border: white 2px solid;
+      border-radius: .7rem;
+      padding: .5rem;
+
+      span {
+        color: white;
+        margin: .2rem auto;
+        font-size: .8, rem;
+        display: inline-block;
+        max-width: 15rem; /* Ajusta este valor según sea necesario */
+        overflow: hidden;
+        text-overflow: ellipsis; /* Muestra puntos suspensivos (...) si el texto se recorta */
+        white-space: nowrap;
+      }
+      .li-Botones {
+        display: flex;
+        flex-direction: row;
+
+        button {
+          padding: 1rem auto;
+        }
+      }
     }
   }
 }
