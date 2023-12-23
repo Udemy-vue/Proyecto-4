@@ -3,16 +3,36 @@
     <h1>Home</h1>
     <h2 v-if="!useUser.loading">{{useUser.userInfo.email}}</h2>
     
-    <form class="inputs" @submit.prevent="CreateInput">
+    <form class="inputs" @submit.prevent="">
 
-      <input class="input-register" 
+      <a-input v-model:value="name" type="text" placeholder="Ingrese URL">
+
+        <template #prefix>
+          <GlobalOutlined />
+        </template>
+
+        <template #suffix>
+          <a-tooltip title="Adiciona la URL">
+            <InfoCircleOutlined style="color: rgba(0, 0, 0, 0.45)"/>
+          </a-tooltip>
+        </template>
+
+      </a-input>
+
+      <ButtonCounter :buttonText="'Agregar'"
+        :updateIcono="global"
+        @lectura="CreateInput" 
+        :paso="useData.loadingDoc" 
+        :clase="'antDesign'"/>
+
+      <!-- <input class="input-register" 
         v-model="name"  
         type="text"
-        placeholder="Ingrese URL">
+        placeholder="Ingrese URL"> -->
 
-      <ButtonCounter :buttonText="'Agregar'" 
+      <!-- <ButtonCounter :buttonText="'Agregar'" 
         :paso="useData.loadingDoc" 
-        :clase="''"/>
+        :clase="''"/> -->
     </form>
 
     <h2 v-if="useData.loadingDoc">Loading docs..</h2>
@@ -24,7 +44,22 @@
         <span>{{item.short}}</span>
 
         <div class="li-Botones">
-          <ButtonCounter :buttonText="'Editar'" 
+          
+          <ButtonCounter :buttonText="'Editar'"
+            :info="item.id"
+            :updateIcono="editado"
+            @lectura="Editar" 
+            :paso="useData.loadingDoc" 
+            :clase="'antDesign'"/>
+
+          <ButtonCounter :buttonText="'Borrar'"
+            :info="item.id"
+            :updateIcono="borrar"
+            @lectura="useData.deleteUrl" 
+            :paso="useData.loadingDoc" 
+            :clase="'antDesign'"/>
+
+          <!-- <ButtonCounter :buttonText="'Editar'" 
             :info="item.id"
             @lectura="Editar" 
             :paso="useData.loadingDoc" 
@@ -34,15 +69,21 @@
             :info="item.id"
             @lectura="useData.deleteUrl" 
             :paso="useData.loadingDoc" 
-            :clase="''"/>
+            :clase="''"/> -->
         </div> 
       </li>
     </ul>
 
-    <ButtonCounter :buttonText="'Logout'" 
+    <ButtonCounter :buttonText="'Logout'"
+        :updateIcono="salir"
+        @lectura="cerrado" 
+        :paso="useData.loadingDoc" 
+        :clase="'antDesign'"/>
+
+    <!-- <ButtonCounter :buttonText="'Logout'" 
       @lectura="cerrado" 
       :paso="useUser.loadingUser" 
-      :clase="''"/>
+      :clase="''"/> -->
    <!--  <ButtonCounter :buttonText="'Revisar'" 
       @lectura="useData.Mirar" 
       :paso="useUser.loadingUser" 
@@ -58,6 +99,8 @@ import ButtonCounter from '../components/ButtonCounter.vue';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../../firebaseConfig';
 import { useRouter } from 'vue-router';
+import { PoweroffOutlined, FormOutlined, GlobalOutlined, CloudUploadOutlined, UserOutlined, InfoCircleOutlined,
+  DeleteOutlined, LogoutOutlined, EditOutlined } from '@ant-design/icons-vue';
 
 export default {
   name: 'Home',
@@ -67,7 +110,11 @@ export default {
       useUser: useUserStore(),
       useData: useDatabaseStore(),
       router: useRouter(),
-      name: ''
+      name: '',
+      global: CloudUploadOutlined,
+      borrar: DeleteOutlined,
+      salir: LogoutOutlined,
+      editado: EditOutlined
     }
   },
   methods: {
@@ -75,6 +122,7 @@ export default {
       this.useData.signOutUser();
       // this.UseData.$reset();
       this.useUser.signOutUser();
+      this.useUser.selectedKeys = ["2"];
     },
     async CreateInput() {
       if(this.name === '') return alert('Añada una URL');
@@ -90,6 +138,7 @@ export default {
     }
   },
   async created() {
+    this.useUser.selectedKeys = ["1"]
     this.useData.signOutUser();
     // console.log(this.useUser.loading)
     if (!this.useUser.loading) {
@@ -103,7 +152,13 @@ export default {
     useUserStore,
     ButtonCounter,
     useDatabaseStore,
-    useRouter
+    useRouter,
+    InfoCircleOutlined,
+    GlobalOutlined,
+    CloudUploadOutlined,
+    DeleteOutlined,
+    LogoutOutlined,
+    EditOutlined
   }
 }
 </script>

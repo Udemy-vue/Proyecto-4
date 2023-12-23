@@ -132,6 +132,21 @@ export const useDatabaseStore = defineStore('database', {
 			} finally {
 				// statements
 				this.loadingDoc = false;
+
+			}
+		},
+		returnData() {
+			this.loadingDoc = true;
+
+			try {
+				// statements
+				router.push('/');
+			} catch(e) {
+				// statements
+				console.log(e);
+			} finally {
+				this.loadingDoc = false;
+				// statements
 			}
 		}
 	}

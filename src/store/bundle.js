@@ -16,7 +16,8 @@ export const useUserStore = defineStore("user", {
       userInfo: {},
       loadingUser: false,
       loading: true,
-      loadingSession: false
+      loadingSession: false,
+      selectedKeys: ['2']
   }),
   getters: {
     minuscula(state) {
@@ -85,6 +86,7 @@ export const useUserStore = defineStore("user", {
         this.userInfo = {};
         this.loading = true;
         router.push("/login");
+        this.selectedKeys = ["2"];
       } catch(e) {
         // statements
         console.log(e);
@@ -253,6 +255,21 @@ export const useDatabaseStore = defineStore('database', {
 			} finally {
 				// statements
 				this.loadingDoc = false;
+
+			}
+		},
+		returnData() {
+			this.loadingDoc = true;
+
+			try {
+				// statements
+				router.push('/');
+			} catch(e) {
+				// statements
+				console.log(e);
+			} finally {
+				this.loadingDoc = false;
+				// statements
 			}
 		}
 	}
