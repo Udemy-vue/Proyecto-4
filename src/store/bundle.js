@@ -86,7 +86,6 @@ export const useUserStore = defineStore("user", {
         this.userInfo = {};
         this.loading = true;
         router.push("/login");
-        this.selectedKeys = ["2"];
       } catch(e) {
         // statements
         console.log(e);

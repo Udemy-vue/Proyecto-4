@@ -5,26 +5,19 @@
     
     <form v-if="useUser.loading" class="inputs" @submit.prevent="WriteInput">
 
-      <!-- <input class="input-register" 
-        id="Email"
-        v-model="email"  
-        type="email"  
-        maxlength="30"
-        placeholder="Email"> -->
-        <!-- <span v-if="!email">El correo es obligatorio</span> -->
-        <a-input v-model:value="email" type="email" placeholder="Email">
+      <a-input v-model:value="email" type="email" placeholder="Email">
 
-          <template #prefix>
-            <UserOutlined />
-          </template>
+        <template #prefix>
+          <UserOutlined />
+        </template>
 
-          <template #suffix>
-            <a-tooltip title="Adiciona el Correo">
-              <InfoCircleOutlined style="color: rgba(0, 0, 0, 0.45)"/>
-            </a-tooltip>
-          </template>
+        <template #suffix>
+          <a-tooltip title="Adiciona el Correo">
+            <InfoCircleOutlined style="color: rgba(0, 0, 0, 0.45)"/>
+          </a-tooltip>
+        </template>
 
-        </a-input>
+      </a-input>
 
       <a-space direction="vertical" size="middle" style="width: auto">
         <a-input-password 
@@ -40,6 +33,15 @@
         @lectura="WriteInput" 
         :paso="useUser.loadingUser" 
         :clase="'antDesign'"/>
+        
+      <!-- <input class="input-register" 
+        id="Email"
+        v-model="email"  
+        type="email"  
+        maxlength="30"
+        placeholder="Email"> -->
+        <!-- <span v-if="!email">El correo es obligatorio</span> -->
+
       <!-- <input class="input-register" 
         id="Pass"
         v-model="pass"  
