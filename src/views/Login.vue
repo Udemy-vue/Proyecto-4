@@ -76,8 +76,8 @@ export default {
     	tMayuscula: ref(''),
       router: useRouter(),
       Texto: '',
-      email: ref('bluuweb10@test.com'),
-      pass: ref('12341234'),
+      email: ref(''),
+      pass: ref(''),
       login: LoginOutlined
     }
   },
