@@ -3,65 +3,90 @@
 
     <h1 class="texto_centrado">Registro</h1>
     
-    <form v-if="useUser.loading" class="inputs" @submit.prevent="WriteInput">
+    <a-form v-if="useUser.loading"
+            :model="formState"
+            class="inputs"
+            name="basic"
+            @finish="onFinish"
+            @finishFailed="onFinishFailed" @validate="Validate">
 
-      <a-input v-model:value="email" type="email" placeholder="Email">
+      <a-form-item
+          label="Adiciona el correo"
+          name="email"
+          class="pass"
+          :rules="[{ required: true, whitespace: true, type: 'email', message: 'Adicionar un correo valido' }]"
+          style="width: auto; display: flex; flex-direction: column; gap: .5rem;">
 
-        <template #prefix>
-          <UserOutlined />
-        </template>
+        <a-input
+            v-model:value="formState.email"
+            :class="{ 'error': formState.email.length === 0 }"
+            type="email"
+            placeholder="Email">
+          <template #prefix>
+            <UserOutlined/>
+          </template>
+          <template #suffix>
+            <a-tooltip title="Adiciona el Correo">
+              <InfoCircleOutlined style="color: rgba(0, 0, 0, 0.45)"/>
+            </a-tooltip>
+          </template>
+        </a-input>
+      </a-form-item>
 
-        <template #suffix>
-          <a-tooltip title="Adiciona el Correo">
-            <InfoCircleOutlined style="color: rgba(0, 0, 0, 0.45)"/>
-          </a-tooltip>
-        </template>
+<!--      <a-space direction="vertical" size="middle" style="width: auto">-->
+<!--        <a-input-password -->
+<!--          v-model:value="pass" -->
+<!--          id="Pass" -->
+<!--          placeholder="Password" -->
+<!--          :maxlength="24"/>-->
+<!--      </a-space>-->
 
-      </a-input>
+      <a-form-item
+          name="password"
+          label="Ingrese contraseña"
+          :rules="[{ required: true, min: 6, message:  'Ingresa una contraseña con minimo 6 caracteres' }]"
+          size="middle"
+          class="pass"
+          style="width: auto; display: flex; flex-direction: column;">
 
-      <a-space direction="vertical" size="middle" style="width: auto">
-        <a-input-password 
-          v-model:value="pass" 
-          id="Pass" 
-          placeholder="Password" 
-          :maxlength="24"/>
-      </a-space>
+        <a-input-password
+            v-model:value="formState.password"
+            id="Pass"
+            placeholder="Password"
+            :maxlength="24"
+            autocomplete="off"/>
+      </a-form-item>
 
-      <ButtonCounter :buttonText="'Ingresar'" 
-        :info="Texto"
-        :updateIcono="register"
-        @lectura="WriteInput" 
-        :paso="useUser.loadingUser" 
-        :clase="'antDesign'"/>
-        
-      <!-- <input class="input-register" 
-        id="Email"
-        v-model="email"  
-        type="email"  
-        maxlength="30"
-        placeholder="Email"> -->
-        <!-- <span v-if="!email">El correo es obligatorio</span> -->
+      <a-form-item
+          name="checkPass"
+          label="Repita contraseña"
+          :rules="[{ required: true, min: 6, validator: validatePass }]"
+          size="middle"
+          class="pass"
+          style="width: auto; display: flex; flex-direction: column;">
 
-      <!-- <input class="input-register" 
-        id="Pass"
-        v-model="pass"  
-        type="password"  
-        maxlength="24"
-        placeholder="Password"> -->
-        <!-- <span v-if="!pass">La contraseña es obligatoria</span> -->
+        <a-input-password
+            v-model:value="formState.checkPass"
+            id="Pass"
+            placeholder="Password"
+            :maxlength="24"
+            autocomplete="off"/>
+      </a-form-item>
 
-      <!-- <ButtonCounter :buttonText="'Registrar'" 
-        :info="Texto"
-        @lectura="" 
-        :paso="useUser.loadingUser" 
-        :clase="''"/> -->
-    </form>
-
+      <a-form-item>
+        <ButtonCounter :buttonText="'Registrar'"
+                       type="primary" html-type="submit"
+                       :info="Texto"
+                       :updateIcono="register"
+                       :paso="useUser.loadingUser"
+                       :clase="'antDesign'"/>
+      </a-form-item>
+    </a-form>
   </div>
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref, reactive } from 'vue';
 import { useUserStore } from '../store/bundle.js';
 import ButtonCounter from '../components/ButtonCounter.vue';
 import { useRouter } from 'vue-router';
@@ -76,17 +101,35 @@ export default {
       useUser: useUserStore(),
       router: useRouter(),
       Texto: '',
-      email: ref(''),
-      pass: ref(''),
-      register: FormOutlined
+      register: FormOutlined,
+      formState: reactive({
+        email: '',
+        password: '',
+        checkPass: ''
+      })
     }
   },
   methods: {
-    async WriteInput() {
-      // this.useUser.registro(this.Texto);
-      if(!this.email || this.pass.length < 6) return alert('Completa los campos')
-      await this.useUser.registerUser(this.email, this.pass);
-    }
+    async validatePass(_rule, value){
+      if (value === ''){
+        return Promise.reject('Repita contraseña')
+      }
+      if(value !== this.formState.password){
+        return Promise.reject('No coinciden las contraseñas')
+      } else {
+          return Promise.resolve()
+      }
+    },
+    async onFinish(values) {
+        console.log('Success:', values);
+        await this.useUser.registerUser(values.email, values.password);
+    },
+    onFinishFailed(errorInfo) {
+        console.log('Failed:', errorInfo);
+    },
+    // Validate(...args){
+    //   console.log(args)
+    // }
   },
   components: {
     ButtonCounter,

@@ -282,4 +282,16 @@ ant-menu-overflow-item ant-menu-item  ant-menu-item-only-child */
   display: flex;
   flex-direction: column;
   grid-gap: 1rem;
+  @media  (min-width: 576px) {
+    gap: 2rem;
+  }
+
+  .pass {
+    label {
+      color: white;
+    }
+    .message {
+      color: red;
+    }
+  }
 }

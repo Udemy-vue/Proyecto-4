@@ -3,64 +3,62 @@
 		
     <h1>Login</h1>
 
-    <form v-if="useUser.loading" class="inputs" @submit.prevent="">
-      
-     
-      <a-input 
-        v-model:value="email" 
-        type="email" 
-        placeholder="Email">
+    <a-form v-if="useUser.loading"
+            :model="formState"
+            class="inputs"
+            name="basic"
+            @finish="onFinish"
+            @finishFailed="onFinishFailed">
 
-        <template #prefix><UserOutlined/></template>
+      <a-form-item
+          label="Adiciona el correo"
+          name="username"
+          class="pass"
+          :rules="[{ required: true, whitespace: true, type: 'email', message: 'Adicionar el correo valido' }]"
+          style="width: auto; display: flex; flex-direction: column; gap: .5rem;">
 
-        <template #suffix>
-          <a-tooltip title="Adiciona el Correo">
-            <InfoCircleOutlined style="color: rgba(0, 0, 0, 0.45)"/>
-          </a-tooltip>
-        </template>
-      </a-input>
+        <a-input
+            v-model:value="formState.username"
+            :class="{ 'error': formState.username.length === 0 }"
+            type="email"
+            placeholder="Email">
+          <template #prefix>
+            <UserOutlined/>
+          </template>
+          <template #suffix>
+            <a-tooltip title="Adiciona el Correo">
+              <InfoCircleOutlined style="color: rgba(0, 0, 0, 0.45)"/>
+            </a-tooltip>
+          </template>
+        </a-input>
+      </a-form-item>
 
-      <a-space 
-        direction="vertical" 
-        size="middle" 
-        style="width: auto">
+      <a-form-item
+          name="password"
+          label="Ingrese contraseña"
+          :rules="[{ required: true, min: 6, message:  'Ingresa una contraseña con minimo 6 caracteres' }]"
+          size="middle"
+          class="pass"
+          style="width: auto; display: flex; flex-direction: column;">
 
-        <a-input-password 
-          v-model:value="pass" 
-          id="Pass" 
-          placeholder="Password" 
-          :maxlength="24"/>
-
-      </a-space>
-
-      <ButtonCounter :buttonText="'Ingresar'" 
-        :updateIcono="login"
-        @lectura="WriteInput" 
-        :paso="useUser.loadingUser" 
-        :clase="'antDesign'"/>
-
-      <!-- <input class="input-register" 
-        id="Email"
-        v-model="email"  
-        type="email"  
-        maxlength="30"
-        placeholder="Email"> -->
-        <!-- <span v-if="!email">El correo es obligatorio</span> -->
-
-      <!-- <input class="input-register" 
-        id="Pass"
-        v-model="pass"  
-        type="password"  
-        maxlength="24"
-        placeholder="Password"> -->
-
-        <!-- <span v-if="!pass">La contraseña es obligatoria</span> -->
-    </form>
+        <a-input-password v-model:value="formState.password"
+            id="Pass"
+            placeholder="Password"
+            :maxlength="24" />
+      </a-form-item>
+      <a-form-item>
+        <ButtonCounter :buttonText="'Ingresar'"
+                       type="primary" html-type="submit"
+                       :updateIcono="login"
+                       :paso="useUser.loadingUser"
+                       :clase="'antDesign'"/>
+      </a-form-item>
+    </a-form>
 	</div>
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref, reactive } from 'vue';
 import { useUserStore } from '../store/bundle.js';
 import ButtonCounter from '../components/ButtonCounter.vue';
 import { useRouter } from 'vue-router';
@@ -70,15 +68,21 @@ import { PoweroffOutlined, LoginOutlined, UserOutlined, InfoCircleOutlined } fro
 export default {
 
   name: 'Login',
+  setup() {
+
+  },
   data () {
+
     return {
     	useUser: useUserStore(),
     	tMayuscula: ref(''),
       router: useRouter(),
       Texto: '',
-      email: ref(''),
-      pass: ref(''),
-      login: LoginOutlined
+      login: LoginOutlined,
+      formState: reactive({
+        username: '',
+        password: ''
+      })
     }
   },
   mounted() {
@@ -88,12 +92,13 @@ export default {
   	this.tMayuscula = this.useUser.userData.toUpperCase();
   },
   methods: {
-    async WriteInput() {
-      // this.useUser.registro(this.Texto);
-      if(this.email.length < 6 || this.pass.length < 6) return alert('Completa los campos')
-
-      await this.useUser.loginUser(this.email, this.pass);
-    }
+    async onFinish(values) {
+        console.log('Success:', values);
+        await this.useUser.loginUser(this.formState.username, this.formState.password);
+    },
+    onFinishFailed(errorInfo) {
+        console.log('Failed:', errorInfo);
+    },
   },
   components: {
   	ButtonCounter,
