@@ -1,4 +1,3 @@
-
 export const useDatabaseStore = defineStore('database', {
 	state: () => ({
 		documents: [],
@@ -76,7 +75,19 @@ export const useDatabaseStore = defineStore('database', {
 					throw new Error('no existe el documentos');
 				}
 				await deleteDoc(docRef);
-				this.documents = this.documents.filter(item => item.id !== id)
+				this.documents = this.documents.filter(item => item.id !== id);
+				const success = (error) => {
+					message
+						.loading('Verificando credenciales...', 1)
+						.then(() => {
+							if (error === 'ok') {
+								message.success('Dato Eliminado', 2.5);
+							} else {
+								message.error(this.useUser.validation(error), 2.5);
+							}
+						});
+				};
+				success('ok');
 			} catch(e) {
 				// statements
 				console.log(e);

@@ -10,6 +10,9 @@ import { collection, query, where, getDoc,
 		updateDoc } from 'firebase/firestore'
 import router from '../router';
 import { nanoid } from 'nanoid';
+import {errorAutentication} from "../../src/Constans";
+import {message} from "ant-design-vue";
+
 export const useUserStore = defineStore("user", {
   state: () => ({
       userData: "bluuweb",
@@ -48,7 +51,8 @@ export const useUserStore = defineStore("user", {
         this.loading = false;
         router.push("/");
       } catch (e) {
-        console.log(e);
+        console.log(e.code);
+        return e.code
         this.userInfo = {};
       } finally {
         this.loadingUser = false;
@@ -70,10 +74,11 @@ export const useUserStore = defineStore("user", {
         };
         this.loading = false;
         router.push("/");
+        return 'ok'
       } catch(e) {
         // statements
-        console.log(e);
         this.userInfo = {};
+        return e.code;
       } finally {
         this.loadingUser = false;
       }
@@ -86,9 +91,11 @@ export const useUserStore = defineStore("user", {
         this.userInfo = {};
         this.loading = true;
         router.push("/login");
+        return 'ok';
       } catch(e) {
         // statements
         console.log(e);
+        return e.code;
       } finally {
         // statements
         this.loadingUser = false;
@@ -117,10 +124,13 @@ export const useUserStore = defineStore("user", {
         // Si no lo haces, seguirás escuchando cambios hasta que el componente sea destruido o hasta que desactives manualmente el listener.
         // unsubscribe();
       });
+    },
+
+    validation(error){
+      return errorAutentication[error]
     }
   }
 });
-
 export const useDatabaseStore = defineStore('database', {
 	state: () => ({
 		documents: [],
@@ -198,7 +208,19 @@ export const useDatabaseStore = defineStore('database', {
 					throw new Error('no existe el documentos');
 				}
 				await deleteDoc(docRef);
-				this.documents = this.documents.filter(item => item.id !== id)
+				this.documents = this.documents.filter(item => item.id !== id);
+				const success = (error) => {
+					message
+						.loading('Verificando credenciales...', 1)
+						.then(() => {
+							if (error === 'ok') {
+								message.success('Dato Eliminado', 2.5);
+							} else {
+								message.error(this.useUser.validation(error), 2.5);
+							}
+						});
+				};
+				success('ok');
 			} catch(e) {
 				// statements
 				console.log(e);

@@ -1,4 +1,3 @@
-
 <template>
 
   <a-layout class="layout">
@@ -14,13 +13,18 @@
           <a-menu-item key="1"  >
             <router-link to="/">Home</router-link>
           </a-menu-item>
+          <a-menu-item key="4"  >
+            <router-link to="/Perfil">Perfil</router-link>
+          </a-menu-item>
         </template>
-        <a-menu-item key="2">
-          <router-link to="/login">Login</router-link>
-        </a-menu-item>
-        <a-menu-item key="3">
-          <router-link to="/register">Register</router-link>
-        </a-menu-item>
+        <template v-else>
+          <a-menu-item key="2">
+            <router-link to="/login">Login</router-link>
+          </a-menu-item>
+          <a-menu-item key="3">
+            <router-link to="/register">Register</router-link>
+          </a-menu-item>
+        </template>
 
       </a-menu>
     </a-layout-header>
@@ -43,7 +47,6 @@ export default {
     }
   },
   methods: {
-
   },
   components: {
     useRouter,

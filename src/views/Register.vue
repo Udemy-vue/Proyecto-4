@@ -8,7 +8,7 @@
             class="inputs"
             name="basic"
             @finish="onFinish"
-            @finishFailed="onFinishFailed" @validate="Validate">
+            @finishFailed="onFinishFailed">
 
       <a-form-item
           label="Adiciona el correo"
@@ -32,14 +32,6 @@
           </template>
         </a-input>
       </a-form-item>
-
-<!--      <a-space direction="vertical" size="middle" style="width: auto">-->
-<!--        <a-input-password -->
-<!--          v-model:value="pass" -->
-<!--          id="Pass" -->
-<!--          placeholder="Password" -->
-<!--          :maxlength="24"/>-->
-<!--      </a-space>-->
 
       <a-form-item
           name="password"
@@ -67,7 +59,7 @@
 
         <a-input-password
             v-model:value="formState.checkPass"
-            id="Pass"
+            id="checkPass"
             placeholder="Password"
             :maxlength="24"
             autocomplete="off"/>
@@ -91,6 +83,7 @@ import { useUserStore } from '../store/bundle.js';
 import ButtonCounter from '../components/ButtonCounter.vue';
 import { useRouter } from 'vue-router';
 import { PoweroffOutlined, FormOutlined, LoginOutlined, UserOutlined, InfoCircleOutlined } from '@ant-design/icons-vue';
+import {message} from "ant-design-vue";
 
 export default {
 
@@ -122,14 +115,23 @@ export default {
     },
     async onFinish(values) {
         console.log('Success:', values);
-        await this.useUser.registerUser(values.email, values.password);
+        const error = await this.useUser.registerUser(values.email, values.password);
+        const success = (error) => {
+          message
+              .loading('Verificando credenciales...', 1)
+              .then(() => {
+                if (error === 'ok') {
+                  message.success('Registro exitoso', 2.5);
+                } else {
+                  message.error(this.useUser.validation(error), 2.5);
+                }
+              });
+        };
+        success(error);
     },
     onFinishFailed(errorInfo) {
         console.log('Failed:', errorInfo);
-    },
-    // Validate(...args){
-    //   console.log(args)
-    // }
+    }
   },
   components: {
     ButtonCounter,

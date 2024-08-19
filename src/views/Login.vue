@@ -47,11 +47,12 @@
             :maxlength="24" />
       </a-form-item>
       <a-form-item>
-        <ButtonCounter :buttonText="'Ingresar'"
-                       type="primary" html-type="submit"
-                       :updateIcono="login"
-                       :paso="useUser.loadingUser"
-                       :clase="'antDesign'"/>
+        <ButtonCounter
+            :buttonText="'Ingresar'"
+            type="primary" html-type="submit"
+            :updateIcono="login"
+            :paso="useUser.loadingUser"
+            :clase="'antDesign'"/>
       </a-form-item>
     </a-form>
 	</div>
@@ -64,6 +65,7 @@ import ButtonCounter from '../components/ButtonCounter.vue';
 import { useRouter } from 'vue-router';
 import { MessageOutlined } from '@ant-design/icons-vue';
 import { PoweroffOutlined, LoginOutlined, UserOutlined, InfoCircleOutlined } from '@ant-design/icons-vue';
+import {  message } from 'ant-design-vue';
 
 export default {
 
@@ -94,7 +96,19 @@ export default {
   methods: {
     async onFinish(values) {
         console.log('Success:', values);
-        await this.useUser.loginUser(this.formState.username, this.formState.password);
+        const error = await this.useUser.loginUser(values.username, values.password);
+        const success = (error) => {
+          message
+              .loading('Verificando credenciales...', 1)
+              .then(() => {
+                if (error === 'ok') {
+                  message.success('Autenticación exitosa', 2.5);
+                } else {
+                  message.error(this.useUser.validation(error), 2.5);
+                }
+              });
+        };
+        success(error);
     },
     onFinishFailed(errorInfo) {
         console.log('Failed:', errorInfo);

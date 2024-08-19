@@ -25,14 +25,6 @@
         :paso="useData.loadingDoc" 
         :clase="'antDesign'"/>
 
-      <!-- <input class="input-register" 
-        v-model="name"  
-        type="text"
-        placeholder="Ingrese URL"> -->
-
-      <!-- <ButtonCounter :buttonText="'Agregar'" 
-        :paso="useData.loadingDoc" 
-        :clase="''"/> -->
     </form>
 
     <h2 v-if="useData.loadingDoc">Loading docs..</h2>
@@ -52,42 +44,24 @@
             :paso="useData.loadingDoc" 
             :clase="'antDesign'"/>
 
-          <ButtonCounter :buttonText="'Borrar'"
-            :info="item.id"
-            :updateIcono="borrar"
-            @lectura="useData.deleteUrl" 
-            :paso="useData.loadingDoc" 
-            :clase="'antDesign'"/>
+          <ButtonCounter
+              :buttonText="'Borrar'"
+              :info="item.id"
+              :updateIcono="borrar"
+              @lectura="useData.deleteUrl"
+              :paso="useData.loadingDoc"
+              :clase="'antDesign'"/>
 
-          <!-- <ButtonCounter :buttonText="'Editar'" 
-            :info="item.id"
-            @lectura="Editar" 
-            :paso="useData.loadingDoc" 
-            :clase="''"/>
-
-          <ButtonCounter :buttonText="'Eliminar'" 
-            :info="item.id"
-            @lectura="useData.deleteUrl" 
-            :paso="useData.loadingDoc" 
-            :clase="''"/> -->
         </div> 
       </li>
     </ul>
 
-    <ButtonCounter :buttonText="'Logout'"
+    <ButtonCounter
+        :buttonText="'Logout'"
         :updateIcono="salir"
         @lectura="cerrado" 
         :paso="useData.loadingDoc" 
         :clase="'antDesign'"/>
-
-    <!-- <ButtonCounter :buttonText="'Logout'" 
-      @lectura="cerrado" 
-      :paso="useUser.loadingUser" 
-      :clase="''"/> -->
-   <!--  <ButtonCounter :buttonText="'Revisar'" 
-      @lectura="useData.Mirar" 
-      :paso="useUser.loadingUser" 
-      :clase="''"/> -->
   </div>
 </template>
 

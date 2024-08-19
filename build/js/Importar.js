@@ -10,3 +10,5 @@ import { collection, query, where, getDoc,
 		updateDoc } from 'firebase/firestore'
 import router from '../router';
 import { nanoid } from 'nanoid';
+import {errorAutentication} from "../../src/Constans";
+import {message} from "ant-design-vue";
