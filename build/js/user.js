@@ -3,7 +3,7 @@ export const useUserStore = defineStore("user", {
       userData: "bluuweb",
       userInfo: {},
       loadingUser: false,
-      loading: false,
+      loading: true,
       loadingSession: false,
       selectedKeys: ['2']
   }),
