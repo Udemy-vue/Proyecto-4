@@ -100,7 +100,6 @@ export default {
     },
     async CreateInput() {
       if(this.name === '') return alert('Añada una URL');
-
       await this.useData.addUrl(this.name)
       this.name = '';
       console.log("agregado");

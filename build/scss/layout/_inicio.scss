@@ -190,7 +190,7 @@ nav {
 }
 /* ant-menu-overflow-item ant-menu-item ant-menu-item-only-child
 ant-menu-overflow-item ant-menu-item  ant-menu-item-only-child */
-.Register, .Login, .Home, .Editar {
+.Register, .Login, .Home, .Editar, .Perfil {
   display: flex;
   flex-direction: column;
   padding: 2rem;
@@ -292,6 +292,10 @@ ant-menu-overflow-item ant-menu-item  ant-menu-item-only-child */
     }
     .message {
       color: red;
+    }
+    .email {
+      background-color: darkgrey;
+      color: black;
     }
   }
 }

@@ -82,8 +82,8 @@ export default {
       Texto: '',
       login: LoginOutlined,
       formState: reactive({
-        username: '',
-        password: ''
+        username: 'test@test.com',
+        password: 'qwer1234'
       })
     }
   },
@@ -95,7 +95,7 @@ export default {
   },
   methods: {
     async onFinish(values) {
-        console.log('Success:', values);
+        // console.log('Success:', values);
         const error = await this.useUser.loginUser(values.username, values.password);
         const success = (error) => {
           message
